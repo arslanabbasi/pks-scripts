@@ -2,6 +2,7 @@
 
 set -e
 
+
 opsman=$1
 pd=$2
 
@@ -25,3 +26,11 @@ uaac token client get admin -s $pksumac
 uaac user add lab-admin --emails lab-admin@vmware.com -p VMware1!
 uaac member add pks.clusters.admin lab-admin
 pks create-cluster cluster1 -e cluster1.lab.local -p small
+
+k8sv=$(pks clusters --json |jq -r .[].k8s_version|tail -1)
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v$k8sv/bin/linux/amd64/kubectl
+chmod +x kubectl
+mv kubectl /usr/local/bin/kubectl
+
+
+sudo sh -c ' ip=$(pks cluster cluster1 --json |jq -r .kubernetes_master_ips[0]); echo "\n$ip cluster1.lab.local" >> /etc/hosts'
