@@ -25,6 +25,7 @@ uaac target https://opsman:8443 --skip-ssl-validation
 uaac token client get admin -s $pksumac
 uaac user add lab-admin --emails lab-admin@vmware.com -p VMware1!
 uaac member add pks.clusters.admin lab-admin
+pks login -a api.run.haas-230.pez.pivotal.io -u lab-admin -p VMware1! -k
 pks create-cluster cluster1 -e cluster1.lab.local -p small
 
 k8sv=$(pks clusters --json |jq -r .[].k8s_version|tail -1)
